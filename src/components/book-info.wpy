@@ -1,0 +1,92 @@
+<template>
+  <view>
+    <van-dialog
+      use-slot
+      title="{{scanInfo.title}}"
+      show="{{showDialog}}"
+      style="text-align: center"
+      confirmButtonText="加入收藏"
+      bind:confirm="addBooks"
+      showCancelButton="true"
+    >
+      <van-rate
+        value="{{ scanInfo.rate / 2 }}"
+        size="{{ 20 }}"
+        color="#ee0a24"
+        void-color="#eee"
+        allow-half="{{true}}"
+        void-icon="star"
+        readonly="{{true}}"
+      ></van-rate>
+      <image
+        src="{{scanInfo.image}}"
+        style="width: 70%"
+      />
+    </van-dialog>
+    <van-toast id="van-toast" />
+  </view>
+</template>
+
+<script>
+import wepy from '@wepy/core';
+import Toast from '../static/vant-lib/toast/toast.js';
+wepy.component({
+  props: {
+    scanInfo: {
+      type: Object,
+      default: {
+        title: '',
+        rate: 0,
+        image: ''
+      }
+    },
+    showDialog: {
+      type: Boolean,
+      default: false
+    }
+  },
+  methods: {
+    addBooks() {
+      let info = this.scanInfo;
+      const db = wx.cloud.database();
+      const _ = db.command;
+      db.collection('books')
+        .where({
+          isbn: _.eq(info.isbn)
+        })
+        .get()
+        .then(res => {
+          console.log(res);
+          const { data } = res;
+          if (data.length > 0) {
+            // db.collection('books').doc(data[0]._id)
+            console.log('111');
+            Toast.success(`${result.title}`);
+          } else {
+            db.collection('books').add({
+              data: info,
+              success: ret => {
+                console.log(ret);
+                if (ret._id) {
+                  Toast.success(`${result.title}`);
+                  // this.getLists();
+                }
+              }
+            });
+          }
+          // wepy.getStorageSync('code')
+        });
+    }
+  }
+});
+</script>
+
+<config>
+{
+  "usingComponents": {
+    'van-dialog': '../static/vant-lib/dialog/index',
+    'van-rate': '../static/vant-lib/rate/index',
+    'van-toast': './static/vant-lib/toast/index'
+  }
+}
+</config>

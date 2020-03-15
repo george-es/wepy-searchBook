@@ -16,12 +16,13 @@
   "author": "George <836816673@qq.com>",
   "license": "MIT",
   "dependencies": {
+    "@vant/weapp": "^1.0.6",
+    "@wepy/core": "^2.0.0-alpha.9",
     "@wepy/redux": "^2.0.1",
     "redux": "^4.0.1",
     "redux-actions": "^2.6.5",
     "redux-promise": "^0.6.0",
-    "@wepy/core": "^2.0.0-alpha.9",
-    "miniprogram-slide-view": "0.0.3"
+    "vant-weapp": "^0.5.27"
   },
   "devDependencies": {
     "@wepy/cli": "^2.0.0-alpha.20",

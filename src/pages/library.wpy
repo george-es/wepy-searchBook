@@ -1,0 +1,92 @@
+<template>
+  <view class="library">
+    <!-- <van-nav-bar
+      safe-area-inset-top="{{false}}"
+      title="我的图书馆"
+      left-text="返回"
+      bind:click-left="onClickLeft"
+    ></van-nav-bar> -->
+    <NavBar
+      title="我的图书馆"
+      showLeftIcon="true"
+      titleLocation="center"
+      bind:clickLeft="goBack"
+    />
+
+    <view
+      class="lists"
+      wx:for="{{lists}}"
+      wx:key="{{index}}"
+    >
+      <van-card
+        class="card"
+        desc="{{item.summary}}"
+        title="{{item.title}}"
+        thumb="{{item.image}}"
+      >
+        <view
+          slot="bottom"
+          class="card-bottom"
+        >
+          <van-icon name="arrow"></van-icon>
+        </view>
+      </van-card>
+    </view>
+  </view>
+</template>
+<style lang="less">
+.library {
+  .lists {
+    .card {
+      .van-card__desc {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
+      }
+      .card-bottom {
+        display: flex;
+        justify-content: flex-end;
+      }
+    }
+  }
+}
+</style>
+
+<script>
+import wepy from '@wepy/core';
+wepy.page({
+  data: {
+    lists: []
+  },
+  onLoad() {
+    const db = wx.cloud.database();
+    db.collection('books')
+      .get()
+      .then(res => {
+        console.log(res);
+        this.lists = res.data;
+        // this.setData({
+        //   lists: res.data
+        // });
+      });
+  },
+  methods: {
+    goBack() {
+      wx.navigateBack();
+    },
+    
+  }
+});
+</script>
+
+<config>
+{
+  navigationBarTitleText: '我的图书馆',
+  usingComponents: {
+    'NavBar': '../components/nav-bar',
+    'van-card': '../static/vant-lib/card/index',
+    'van-icon': '../static/vant-lib/icon/index'
+  }
+}
+</config>

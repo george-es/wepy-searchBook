@@ -9,5 +9,6 @@
   "compileType": "miniprogram",
   "appid": "wx833c6e2b567aed62",
   "projectname": "searchbook",
-  "miniprogramRoot": "./weapp"
+  "miniprogramRoot": "./weapp",
+  "cloudfunctionRoot": "./cloudfunctions"
 }

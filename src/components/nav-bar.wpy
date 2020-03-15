@@ -1,0 +1,86 @@
+<template lang="wxml">
+  <view class="navbar" style="text-align: {{titleLocation}}">
+    <view
+      class="btn left"
+      bindtap="clickLeft"
+      wx:if="{{showLeftIcon || leftText}}">
+      <van-icon
+        name="arrow-left"
+        wx:if="{{showLeftIcon}}"/>
+      <text wx:if="{{leftText}}">{{leftText}}</text>
+    </view>
+
+    <text>{{title}}</text>
+
+    <view
+      class="btn right"
+      bindtap="clickRight"
+      wx:if="{{showRightIcon || rightText}}">
+      <text wx:if="{{rightText}}">{{rightText}}</text>
+      <van-icon
+        name="arrow"
+        wx:if="{{showRightIcon}}" />
+    </view>
+  </view>
+</template>
+<style lang="less">
+.navbar {
+  position: relative;
+  height: 46px;
+  line-height: 46px;
+  font-size: 16px;
+  position: relative;
+  .btn {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    color:#1989fa;
+    font-size: 14px;
+  }
+  .left {
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%)
+  }
+  .right {
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%)
+  }
+}
+</style>
+
+<script>
+import wepy from '@wepy/core';
+wepy.component({
+  props: {
+    title: String,
+    leftText: String,
+    rightText: String,
+    titleLocation: String,
+    showRightIcon: {
+      type: Boolean,
+      default: false
+    },
+    showLeftIcon: {
+      type: Boolean,
+      default: false
+    }
+  },
+  methods: {
+    clickLeft() {
+      this.$emit('clickLeft')
+    },
+    clickRight() {
+      this.$emit('clickRight')
+    }
+  }
+});
+</script>
+<config>
+{
+  "usingComponents": {
+    "van-icon": "../static/vant-lib/icon/index",
+  }
+}
+</config>

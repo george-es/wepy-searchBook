@@ -1,0 +1,62 @@
+<template>
+  <van-dialog
+    bind:getuserinfo="getUserInfo"
+    message="你还没授权哟，我们将无法为你创建属于你的图书馆"
+    show="{{ show }}"
+    confirm-button-text="进入授权"
+    confirm-button-open-type="getUserInfo"
+  />
+  <van-toast id="van-toast" />
+</template>
+
+<script>
+import wepy from '@wepy/core';
+import Toast from '../static/vant-lib/toast/toast.js';
+wepy.component({
+  ready() {
+    this.verify();
+  },
+  data: {
+    show: false
+  },
+  methods: {
+    getUserInfo() {
+      wx.getUserInfo({
+        success: user => {
+          console.log('userInfo', user.userInfo);
+          wx.login({
+            success: res => {
+              console.log('用户登录信息', res)
+              wx.setStorageSync('code', res.code);
+            }
+          });
+        }
+      });
+    },
+    verify() {
+      wx.getSetting({
+        success: res => {
+          if (res.authSetting['scope.userInfo']) {
+            // 已经授权可以用用户信息
+            this.getUserInfo();
+          } else {
+            this.show = true;
+          }
+        },
+        fail: err => {
+          Toast.fail(err);
+        }
+      });
+    }
+  }
+});
+</script>
+
+<config>
+ {
+    "usingComponents": {
+      'van-dialog': '../static/vant-lib/dialog/index',
+      'van-toast': '../static/vant-lib/toast/index',
+    }
+ }
+</config>
